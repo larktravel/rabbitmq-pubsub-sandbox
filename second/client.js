@@ -61,11 +61,11 @@ $(document).ready(function() {
         {durable: true, "content-type":"text/json"},
         JSON.stringify({
           user_channel: airfareChannel,
-          origin: 'NYC',
-          destination: 'LON',
+          origin: "NYC",
+          destination: "LON",
           departs_at: "2016-06-24",
           returns_at: "2016-06-28",
-          cabin_class: 'Y',
+          cabin_class: "Y",
           passengers: 2,
           results: 50
         })
