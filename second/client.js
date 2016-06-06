@@ -56,7 +56,7 @@ $(document).ready(function() {
 $(document).ready(function() {
   $("#airfares_button").click(function() {
     startTime = new Date();
-    for(var i = 0; i < 1; i++) {
+    for(var i = 0; i < 100; i++) {
       client.send("/queue/AIRFARE_REQUEST",
         {durable: true, "content-type":"text/json"},
         JSON.stringify({
