@@ -8,7 +8,7 @@ client.heartbeat.incoming = 0;     // client does not want to receive heartbeats
 // CONSTANTS
 var hotelChannel = "hotel_stays"
 var airfareChannel = "airfares"
-var iterations = 30;
+var iterations = 100;
 var hotelCode = "0013522";
 var lengthOfStay = 3;
 var lengthOfResponse = 50;
@@ -19,7 +19,7 @@ var on_connect = function() {
     var response = JSON.parse(message.body)
     console.log("message from server", response)
     $("."+ response.check_in_at).append(
-      "<td>"+ message.body.substring(0, lengthOfResponse) + "</td>"
+      "<td class='hotel-response'>"+ message.body.substring(0, lengthOfResponse) + "</td>"
     );
   });
 
@@ -42,6 +42,7 @@ var hotelRequestKey = function(counter, date) {
 
 
 var sendHotelStayRequest = function (counter, date) {
+  $(".hotel-response").remove()
   client.send(
    "/queue/HOTEL_STAY_REQUEST",
    {durable: true, "content-type":"text/json"},
@@ -59,6 +60,10 @@ var sendHotelStayRequest = function (counter, date) {
 };
 
 $(document).ready(function() {
+  $("#hotel_stay_toggle").click(function() {
+    $(".hotel-stays-table").toggle();
+  });
+
   $("#hotel_stay_button").click(function() {
     var startDate = new moment();
     for(var i = 0; i < iterations; i++) {
