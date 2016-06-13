@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>RabbitMQ Peformance TEST</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/0.3.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!-- <script type="text/javascript" src="node_modules/webstomp-client/dist/webstomp.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  </head>
+  <body>
+    <button type="button" id="hotel_stay_button">Get Hotel Stays</button>
+    <button type="button" id="airfares_button">Get Airfares</button>
+
+    <div class="container">
+      <h4>Hotel Stay Responses:</h4>
+      <div class="row">
+        <div class="col-xs-6">
+          <table class="hotel-stays-table table table-bordered table-striped">
+            <tr>
+              <th> # </th>
+              <th> Hotel Code </th>
+              <th> Start Date </th>
+              <th> Return Date </th>
+              <th> Response </th>
+            <tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="client.js"></script>
+  </body>
+</html>

@@ -42,11 +42,11 @@ $(document).ready(function() {
         JSON.stringify({
           user_channel: hotelChannel,
           hotel_code: "0013522",
-          check_in_at:  "2016-06-24",
-          check_out_at: "2016-06-28",
+          check_in_at:  "2016-09-14",
+          check_out_at: "2016-09-28",
           passenger_count: 2,
           room_count: 1,
-          refresh: false
+          refresh: true
         })
       );
     }
@@ -56,20 +56,42 @@ $(document).ready(function() {
 $(document).ready(function() {
   $("#airfares_button").click(function() {
     startTime = new Date();
-    for(var i = 0; i < 100; i++) {
+    var counter = 1;
+    for(var i = 2; i < 30; i++) {
       client.send("/queue/AIRFARE_REQUEST",
         {durable: true, "content-type":"text/json"},
         JSON.stringify({
           user_channel: airfareChannel,
           origin: "NYC",
           destination: "LON",
-          departs_at: "2016-06-24",
-          returns_at: "2016-06-28",
+          departs_at: "2016-09-01",
+          returns_at: "2016-09-" + i,
           cabin_class: "Y",
           passengers: 2,
-          results: 50
+          results: 50,
+          request_key: "2016-09-" + i,
+          refresh: true
         })
       );
+      console.log("sent message", counter++);
+    }
+    for(var i = 2; i < 30; i++) {
+      client.send("/queue/AIRFARE_REQUEST",
+        {durable: true, "content-type":"text/json"},
+        JSON.stringify({
+          user_channel: airfareChannel,
+          origin: "NYC",
+          destination: "LON",
+          departs_at: "2016-10-01",
+          returns_at: "2016-10-" + i,
+          cabin_class: "Y",
+          passengers: 2,
+          results: 50,
+          request_key: "2016-10-" + i,
+          refresh: true
+        })
+      );
+      console.log("sent message", counter++);
     }
   })
 })
