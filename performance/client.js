@@ -12,15 +12,24 @@ var iterations = 100;
 var hotelCode = "0013522";
 var lengthOfStay = 3;
 var lengthOfResponse = 50;
+var hotelStart = null;
+
+var hotelResponseCallback = function(message) {
+  var response = JSON.parse(message.body)
+  console.log("message from server", response)
+  $("#hotel-end-time").html(moment().format())
+  $("#hotel-duration").html(
+    moment.duration(new Date() - hotelStart).asSeconds()
+  )
+  $("."+ response.check_in_at).append(
+    "<td class='hotel-response'>"+ message.body.substring(0, lengthOfResponse) + "</td>"
+  );
+}
 
 var on_connect = function() {
   console.log('connected');
   var subscription = client.subscribe(hotelChannel, function(message) {
-    var response = JSON.parse(message.body)
-    console.log("message from server", response)
-    $("."+ response.check_in_at).append(
-      "<td class='hotel-response'>"+ message.body.substring(0, lengthOfResponse) + "</td>"
-    );
+    hotelResponseCallback(message)
   });
 
   var subscription = client.subscribe(airfareChannel, function(message) {
@@ -43,6 +52,8 @@ var hotelRequestKey = function(counter, date) {
 
 var sendHotelStayRequest = function (counter, date) {
   $(".hotel-response").remove()
+  hotelStart = new Date();
+  $("#hotel-start-time").html(moment(hotelStart).format())
   client.send(
    "/queue/HOTEL_STAY_REQUEST",
    {durable: true, "content-type":"text/json"},
@@ -65,6 +76,8 @@ $(document).ready(function() {
   });
 
   $("#hotel_stay_button").click(function() {
+    hotelStart = new Date();
+    $("#hotel-start-time").html(moment(hotelStart).format())
     var startDate = new moment();
     for(var i = 0; i < iterations; i++) {
       console.log("iteration", i);
