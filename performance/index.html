@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <!-- <script type="text/javascript" src="node_modules/webstomp-client/dist/webstomp.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -26,19 +26,22 @@
               <th> Query </th>
               <th> Start Time </th>
               <th> End Time </th>
-              <th> Duration </th>
+              <th> Total Time </th>
+              <th> Mean </th>
             <tr>
             <tr>
               <td> Hotel Stay </td>
               <td id="hotel-start-time"> 0 </td>
               <td id="hotel-end-time"> 0 </td>
               <td id="hotel-duration"> 0 </td>
+              <td id="hotel-stay-mean"> 0 </td>
             <tr>
             <tr>
               <td> Air Stay </td>
               <td id="air-start-time"> 0 </td>
               <td id="air-end-time"> 0 </td>
               <td id="air-duration"> 0 </td>
+              <td id="airfare-mean"> 0 </td>
             <tr>
           </table>
         </div>
@@ -56,6 +59,26 @@
               <th> # </th>
               <th> Hotel Code </th>
               <th> Start Date </th>
+              <th> Return Date </th>
+              <th> Response </th>
+            <tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="container airfares">
+      <h4>Airfare Responses: <span>
+          <button type="button" id="airfare_toggle">Toggle Airfares</button>
+      </span></h4>
+      <div class="row">
+        <div class="col-xs-12">
+          <table class="airfares-table table table-bordered table-striped">
+            <tr>
+              <th> # </th>
+              <th> Origin </th>
+              <th> Destination </th>
+              <th> Depart Date </th>
               <th> Return Date </th>
               <th> Response </th>
             <tr>
