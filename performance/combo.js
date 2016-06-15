@@ -14,12 +14,12 @@ var hotelCodes = [
   "0056940", "0057349", "0059694", "0047806", "0147340", "0037391",
   "0013149", "0281513", "0024374", "0037130", "0061180", "0012181", "0110044"
 ];
-var airportCodes = ["LON", "PAR", "MIA", "LAX"]
+var airportCodes = ["LON", "PAR", "MIA", "LAX", "MLE", "CUN"]
 var lengthOfStay = 3;
 var lengthOfResponse = 25;
 var randomDateRange = 100;
 
-var searchesAtOnce = 10;
+var searchesAtOnce = 25;
 
 var startTime = null;
 var queryLengths = [];
@@ -51,6 +51,7 @@ var hotelResponseCallback = function(message) {
   var response = JSON.parse(message.body)
   console.log("message from server", response)
   updateStatsRow();
+  var transactionStartTime = new Date(response.timestamp)
   $(".results-table").append(
     "<tr class='response-row' style='background: azure'>" +
       "<td>" + counter++ + "</td>" +
@@ -59,6 +60,7 @@ var hotelResponseCallback = function(message) {
       "<td>" + response.check_in_at + "</td>" +
       "<td>" + response.check_out_at + "</td>" +
       "<td>" + moment.duration(new Date() - startTime).asSeconds() + "</td>" +
+      "<td>" + moment.duration(new Date() - transactionStartTime).asSeconds() + "</td>" +
       "<td>" + message.body.substring(0, lengthOfResponse) + "</td>" +
     "</tr>"
   )
@@ -68,6 +70,7 @@ var airfareResponseCallback = function(message) {
   var response = JSON.parse(message.body)
   console.log("message from server", response)
   updateStatsRow();
+  var transactionStartTime = new Date(response.timestamp)
   var dates = response.request_key.match(/.*(\d{8})\|(\d{8}).*/)
   var startDate = dates[1].slice(0,4) + "-" + dates[1].slice(4,6) + dates[1].slice(6)
   var endDate = dates[2].slice(0,4) + "-" + dates[2].slice(4,6) + dates[2].slice(6)
@@ -79,6 +82,7 @@ var airfareResponseCallback = function(message) {
       "<td>" + startDate + "</td>" +
       "<td>" + endDate + "</td>" +
       "<td>" + moment.duration(new Date() - startTime).asSeconds() + "</td>" +
+      "<td>" + moment.duration(new Date() - transactionStartTime).asSeconds() + "</td>" +
       "<td>" + message.body.substring(0, lengthOfResponse) + "</td>" +
     "</tr>"
   )
@@ -124,6 +128,7 @@ var sendHotelStayRequest = function (hotelCode, date) {
      passenger_count: 2,
      room_count: 1,
      refresh: false,
+     timestamp: new Date(),
      request_key: hotelRequestKey(hotelCode, date)
    })
   );
@@ -143,6 +148,7 @@ var sendAirfareRequest = function (airfareDestination, startDate) {
       passengers: 2,
       results: 50,
       request_key: airfareRequestKey(airfareDestination, startDate),
+      timestamp: new Date(),
       refresh: false,
     })
   );
