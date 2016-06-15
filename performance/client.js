@@ -30,7 +30,7 @@ var hotelResponseCallback = function(message) {
   $("#hotel-duration").html(
     moment.duration(timeTaken).asSeconds()
   )
-  $("#hotel-stay-mean").html(_.mean(hotelStayLengths));
+  $("#hotel-stay-mean").html(_.mean(hotelStayLengths)/1000);
   $(".hotel-"+ response.check_in_at).append(
     "<td class='hotel-response'>"+ message.body.substring(0, lengthOfResponse) + "</td>"
   );
@@ -45,7 +45,7 @@ var airfareResponseCallback = function(message) {
   $("#air-duration").html(
     moment.duration(timeTaken).asSeconds()
   )
-  $("#airfare-mean").html(_.mean(airfareStayLengths));
+  $("#airfare-mean").html(_.mean(airfareStayLengths)/1000);
   $(".airfare-"+ response.request_key.replace(/\|/g, "-")).append(
     "<td class='airfare-response'>"+ message.body.substring(0, lengthOfResponse) + "</td>"
   );
