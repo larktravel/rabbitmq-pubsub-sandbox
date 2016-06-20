@@ -285,10 +285,10 @@ $(document).ready(function() {
         var airportCode = _.sample(airportCodes)
         sendAirfareRequest(airportCode, date)
 
-        for(var j = 0; j < hotelsAirRatio; j++) {
-          var hotelCode = _.sample(hotelCodes)
+        var hotelSample = _.sampleSize(hotelCodes, hotelsAirRatio)
+        _.each(hotelSample, function(hotelCode) {
           sendHotelStayRequest(hotelCode, date)
-        }
+        })
       }, timeBetweenSearches * i);
     }
   });
