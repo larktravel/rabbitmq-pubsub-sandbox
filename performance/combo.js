@@ -1,6 +1,7 @@
 var ws = new SockJS('http://127.0.0.1:15674/stomp');
+var client = webstomp.over(ws);
 
-var client = Stomp.over(ws, {debug: false});
+//var client = Stomp.over(ws, {debug: false});
 client.heartbeat.outgoing = 20000; // client will send heartbeats every 20000ms
 client.heartbeat.incoming = 0;     // client does not want to receive heartbeats
 
@@ -13,7 +14,7 @@ var hotelCodes = [
   "0062024", "0020365", "0013741", "0143817", "0006972",
   "0006958", "0020136", "0177969", "0009167", "0135257",
   "0072065", "0162866", "0004784", "0077661", "0032495",
-  "0001211", "0085356", "0175246", "0064165", "0236744"
+  "0001211", "0085356", "0175246", "0064165"
 ]
 var airportCodes = [
   "LON", "PAR", "MIA", "LAX", "MLE", "CPH",
@@ -24,9 +25,9 @@ var airportCodes = [
 ]
 var lengthOfStay = 3;
 var lengthOfResponse = 25;
-var randomDateRange = 200;
+var randomDateRange = 300;
 
-var searchesAtOnce = 25;
+var searchesAtOnce = 125;
 var timeBetweenSearches = 3000;
 var hotelsAirRatio = 3;
 
@@ -138,23 +139,24 @@ var sendHotelStayRequest = function (hotelCode, date) {
       //"<td>" + transactionStartTime + "</td>" +
     "</tr>"
   )
-  client.send(
-   "/queue/HOTEL_STAY_REQUEST",
-   {durable: true, "content-type":"text/json"},
-   JSON.stringify({
-     user_channel: hotelChannel,
-     hotel_code: hotelCode,
-     check_in_at:  moment(date).format("YYYY-MM-DD"),
-     check_out_at: moment(date).add(lengthOfStay, 'days').format("YYYY-MM-DD"),
-     passenger_count: 2,
-     room_count: 1,
-     refresh: false,
-     //timestamp: Number(new Date()),
-     timestamp: new Date(),
-     request_key: hotelRequestKey(hotelCode, date),
-     request_sha: request_sha
-   })
-  );
+  for(var i = 0; i < 2; i++) {
+    client.send("/queue/HOTEL_STAY_REQUEST",
+     JSON.stringify({
+       user_channel: hotelChannel,
+       hotel_code: hotelCode,
+       check_in_at:  moment(date).format("YYYY-MM-DD"),
+       check_out_at: moment(date).add(lengthOfStay, 'days').format("YYYY-MM-DD"),
+       passenger_count: 2,
+       room_count: 1,
+       refresh: false,
+       //timestamp: Number(new Date()),
+       timestamp: new Date(),
+       request_key: hotelRequestKey(hotelCode, date),
+       request_sha: request_sha
+     }),
+     {durable: true, "content-type":"text/json"}
+    );
+  }
 };
 
 var sendAirfareRequest = function (airfareDestination, startDate) {
@@ -170,25 +172,26 @@ var sendAirfareRequest = function (airfareDestination, startDate) {
       //"<td>" + transactionStartTime + "</td>" +
     "</tr>"
   )
-  client.send(
-    "/queue/AIRFARE_REQUEST",
-    {durable: true, "content-type":"text/json"},
-    JSON.stringify({
-      user_channel: airfareChannel,
-      origin: "NYC",
-      destination: airfareDestination,
-      departs_at: moment(startDate).format("YYYY-MM-DD"),
-      returns_at: moment(startDate).add(lengthOfStay, 'days').format("YYYY-MM-DD"),
-      cabin_class: "Y",
-      passengers: 2,
-      results: 50,
-      request_key: airfareRequestKey(airfareDestination, startDate),
-      //timestamp: Number(new Date()),
-      timestamp: new Date(),
-      refresh: false,
-      request_sha: request_sha
-    })
-  );
+  for(var i = 0; i < 2; i++) {
+    client.send("/queue/AIRFARE_REQUEST",
+      JSON.stringify({
+        user_channel: airfareChannel,
+        origin: "NYC",
+        destination: airfareDestination,
+        departs_at: moment(startDate).format("YYYY-MM-DD"),
+        returns_at: moment(startDate).add(lengthOfStay, 'days').format("YYYY-MM-DD"),
+        cabin_class: "Y",
+        passengers: 2,
+        results: 50,
+        request_key: airfareRequestKey(airfareDestination, startDate),
+        //timestamp: Number(new Date()),
+        timestamp: new Date(),
+        refresh: false,
+        request_sha: request_sha
+      }),
+      {durable: true, "content-type":"text/json"}
+    );
+  }
 };
 
 var randomDate = function(){
